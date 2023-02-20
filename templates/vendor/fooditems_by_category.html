@@ -33,10 +33,17 @@
                                     <td class="text-left"><img src="{{food.image.url}}" alt="Food Image" width="40" ></td>
                                     <td class="text-left">
                                         <a href=""><p class="mb-0 font-weight-bold">{{ food }}</p>
-                                            {% comment %} <small class="text-muted">{{ food.description }}</small> {% endcomment %}
+                                            <small class="text-muted">{{ food.description }}</small> 
                                         </a>
                                     </td>
-                                    <td><i class="fa fa-pencil" aria-hidden="true"></i> &nbsp;  <i class="fa fa-trash text-danger" aria-hidden="true"></i></td>
+                                    <td>
+                                      {% if food.is_available %}
+                                      <span class="badge badge-success">Available</span>
+                                      {% else %}
+                                      <span class="badge badge-danger">Not Available</span>
+                                      {% endif %}
+                                    </td>
+                                    <td><a href="{%url 'edit_food' food.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a> &nbsp; <a href="{% url 'delete_food' food.id %}" onclick="return confirm('Are you sure! You want to delete this food item.')"> <i class="fa fa-trash text-danger" aria-hidden="true"></i></a></td>
                                   </tr>
                                 {% endfor %}
                                 </tbody>
