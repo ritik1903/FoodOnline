@@ -18,3 +18,7 @@
     font-size: 12px;
     cursor: pointer;
 }
+
+.main-search.fancy .field-holder imput[type="text"]{
+    color:#000000;
+}
