@@ -7,6 +7,7 @@ from vendor.models import Vendor
 from django.db.models import Prefetch
 from .models import Cart
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 def marketplace(request):
@@ -123,7 +124,19 @@ def search(request):
     latitude = request.GET['lat']
     longitude = request.GET['lng']
     radius = request.GET['radius']
-    r_name = request.GET['rest_name']
+    keyword = request.GET['keyword']
+    
+    #get vendor ids that has the food item the user is looking for
+    fetch_vendors_by_fooditems = FoodItem.objects.filter(food_title__icontains=keyword, is_available=True).values_list('vendor', flat=True)
+    
+    vendors = Vendor.objects.filter(Q(id__in=fetch_vendors_by_fooditems) or Q(vendor_name__icontains=keyword, is_approved=True, user__is_active=True))
+    
+    
+    vendor_count = vendors.count()
+    context = {
+        'vendors' : vendors,
+        'vendor_count' : vendor_count,
+    }
     
     
     return render(request, 'marketplace/listing.html')
